@@ -15,9 +15,10 @@
             font-family: 'Prompt', sans-serif;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            padding-top: 160px;
+            align-items: center;
+            padding: 20px;
             background: url('{{ url_for("static", filename="BG.png") }}') center/cover no-repeat;
             text-align: center;
         }
@@ -25,13 +26,19 @@
         .cover-content {
             color: white;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
         }
         
         .cover-title {
             font-size: 3.5rem;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin: 0;
             animation: fadeIn 1s ease-in;
+            line-height: 1.2;
         }
         
         .start-btn {
@@ -50,6 +57,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            margin: 20px auto;
         }
         
         .start-btn:hover {
@@ -65,15 +73,14 @@
         
         .lang-btn {
             position: fixed;
-            top: 0px;
-            left: 47px;
+            top: 20px;
+            right: 20px;
             padding: 0;
             background: transparent;
             color: white;
             border: none;
             border-radius: 0;
             cursor: pointer;
-            transition: all 0.3s ease;
             z-index: 10;
         }
         
@@ -85,8 +92,104 @@
         }
         
         .lang-btn:hover img {
-            transform: scale(1.1);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+
+        /* Mobile (max-width: 600px) */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 20px;
+            }
+
+            .cover-title {
+                font-size: 2rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 16px 32px;
+                font-size: 1rem;
+                min-width: auto;
+                width: 90%;
+                max-width: 280px;
+                margin: 15px auto;
+            }
+
+            .lang-btn img {
+                width: 56px;
+                height: 56px;
+            }
+
+            .lang-btn:hover img {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Tablet (601px - 1024px) */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            body {
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 20px;
+            }
+
+            .cover-title {
+                font-size: 2.2rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 18px 60px;
+                font-size: 1rem;
+                min-width: 300px;
+                margin: 15px auto;
+            }
+
+            .lang-btn img {
+                width: 70px;
+                height: 70px;
+            }
+        }
+
+        /* Desktop (1025px and above) */
+        @media (min-width: 1025px) {
+            body {
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 25px;
+            }
+
+            .cover-title {
+                font-size: 3.5rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 32px 112px;
+                font-size: 1.5rem;
+                min-width: 500px;
+                margin: 20px auto;
+            }
+
+            .lang-btn img {
+                width: 108px;
+                height: 108px;
+            }
         }
     </style>
 </head>

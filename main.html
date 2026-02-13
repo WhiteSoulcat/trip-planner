@@ -4,7 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧭 วางแผนการท่องเที่ยวเชียงใหม่</title>
+</head>
+
     <style>
+        /* มือถือ */
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+
+        /* แท็บเล็ต */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .container {
+                width: 90%;
+            }
+        }
+
+        /* คอม */
+        @media (min-width: 1025px) {
+            .container {
+                width: 70%;
+            }
+        }
         * {
             margin: 0;
             padding: 0;
@@ -310,7 +333,74 @@
             display: none !important;
         }
 
-        @media (max-width: 1024px) {
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+
+        /* Mobile (max-width: 600px) */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                width: 100%;
+                padding: 0;
+            }
+
+            .panel {
+                padding: 16px;
+                height: auto;
+                min-height: auto;
+                width: 100%;
+            }
+
+            .input-panel {
+                border-right: none;
+                border-bottom: 3px solid #d4c5b9;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            h2 {
+                font-size: 0.95rem;
+            }
+
+            .lang-btn img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .daily-trips-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .icon-box {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            button {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+
+            .form-group {
+                margin-bottom: 12px;
+            }
+
+            label {
+                font-size: 0.85rem;
+                margin-bottom: 4px;
+            }
+        }
+
+        /* Tablet (601px - 1024px) */
+        @media (min-width: 601px) and (max-width: 1024px) {
             .container {
                 flex-direction: column;
             }
@@ -319,8 +409,104 @@
                 border-right: none;
                 border-bottom: 3px solid #d4c5b9;
             }
+
+            .panel {
+                padding: 20px;
+                height: auto;
+                min-height: auto;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            h2 {
+                font-size: 0.95rem;
+                margin-top: 15px;
+                margin-bottom: 12px;
+            }
+
+            .daily-trips-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+
+            .lang-btn img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .form-group {
+                margin-bottom: 12px;
+            }
+
+            label {
+                font-size: 0.85rem;
+                margin-bottom: 4px;
+            }
+
+            input[type="number"],
+            input[type="date"],
+            input[type="time"],
+            select,
+            textarea {
+                font-size: 0.9rem;
+                padding: 8px 10px;
+            }
+
+            button {
+                padding: 9px 20px;
+                font-size: 0.9rem;
+                margin-top: 6px;
+            }
+
+            .result-card {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+
+            .icon-box {
+                gap: 8px;
+            }
+
+            .icon-card label {
+                padding: 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Desktop (1025px and above) */
+        @media (min-width: 1025px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .input-panel {
+                flex: 1;
+                border-right: 3px solid #d4c5b9;
+                border-bottom: none;
+            }
+
+            .output-panel {
+                flex: 1;
+            }
+
+            .panel {
+                padding: 40px;
+                height: calc(100vh - 0px);
+                overflow-y: auto;
+            }
+
+            .daily-trips-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
         }
     </style>
+    
 </head>
 <body>
 
