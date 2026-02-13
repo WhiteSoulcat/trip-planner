@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ท่องเที่ยวเชียงใหม่</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 160px;
+            background: url('{{ url_for("static", filename="BG.png") }}') center/cover no-repeat;
+            text-align: center;
+        }
+        
+        .cover-content {
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .cover-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .start-btn {
+            padding: 32px 112px;
+            font-size: 1.5rem;
+            font-family: 'Prompt', sans-serif;
+            background: rgb(255, 107, 107);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 500px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .start-btn:hover {
+            background: rgb(255, 80, 80);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .lang-btn {
+            position: fixed;
+            top: 0px;
+            left: 47px;
+            padding: 0;
+            background: transparent;
+            color: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .lang-btn img {
+            width: 108px;
+            height: 108px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .lang-btn:hover img {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">
+        <img id="langImg" src="{{ url_for('static', filename='TH.png') }}" alt="Language">
+    </button>
+    
+    <div class="cover-content">
+        <h1 class="cover-title" id="title"></h1>
+        <button class="start-btn" id="startBtnText" onclick="startPlanning()"> 🧭 เริ่มวางแผนทริปท่องเที่ยวของคุณ</button>
+    </div>
+
+    <script>
+        let currentLang = 'th';
+        
+        const translations = {
+            th: {
+                title: '',
+                btnText: '🧭 เริ่มวางแผนทริปท่องเที่ยวของคุณ',
+                img: '{{ url_for("static", filename="TH.png") }}'
+            },
+            en: {
+                title: '',
+                btnText: '🧭 Let\'s Start Planning Your Trip',
+                img: '{{ url_for("static", filename="en.jpg") }}'
+            }
+        };
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.documentElement.lang = currentLang;
+            document.getElementById('langImg').src = translations[currentLang].img;
+            document.getElementById('title').textContent = translations[currentLang].title;
+            document.getElementById('startBtnText').textContent = translations[currentLang].btnText;
+        }
+        
+        function startPlanning() {
+            window.location.href = "{{ url_for('main') }}";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧭 วางแผนการท่องเที่ยวเชียงใหม่</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0ebe5;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            width: 100%;
+        }
+
+        .panel {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            height: calc(100vh - 0px);
+        }
+
+        .input-panel {
+            background: #ffffff;
+            border-right: 3px solid #d4c5b9;
+        }
+
+        .output-panel {
+            background: #fafaf8;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #2c2c2c;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: #3d3d3d;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #d4c5b9;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            color: #2c2c2c;
+            margin: 10px 0 8px 0;
+            font-weight: 600;
+            border: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #2c2c2c;
+            background: #fafaf8;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #8b7d6b;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(139, 125, 107, 0.1);
+        }
+
+        button {
+            padding: 11px 28px;
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #1f1f1f;
+            transform: translateY(-1px);
+        }
+
+        .result-card {
+            background: white;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            border-left: 3px solid #8b7d6b;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-card h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .result-card p {
+            color: #666;
+            line-height: 1.5;
+            margin: 4px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Vertical trip layout: days as side-by-side columns */
+        .daily-trips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .day-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .day-column h3 {
+            margin: 0 0 12px 0;
+            font-size: 1rem;
+            color: #333;
+            border-bottom: 2px solid #d4c5b9;
+            padding-bottom: 8px;
+        }
+
+        .trip-step {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+
+        .trip-step.hotel {
+            background: #fff7ec;
+            border-left: 4px solid #e9cfa8;
+        }
+
+        .trip-step .step-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .trip-step .step-meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .info-text {
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .icon-box {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .icon-card input[type="checkbox"] {
+            display: none;
+        }
+
+        .icon-card label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .icon-card input[type="checkbox"]:checked + label {
+            background: #8b7d6b;
+            color: white;
+            border-color: #8b7d6b;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            background: #8b7d6b;
+            color: white;
+            border-color: #8b7d6b;
+        }
+
+        .lang-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            padding: 0;
+            background: transparent;
+            color: white;
+            border: none !important;
+            border-radius: 0;
+            cursor: pointer;
+            z-index: 30;
+            outline: none;
+        }
+
+        .lang-btn:focus { outline: none; }
+
+        .lang-btn img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent;
+        }
+        /* Force-remove any pseudo-element overlays or hover highlights that may appear
+           when interacting with the language control. */
+        .lang-btn, .lang-btn *,
+        .lang-btn::before, .lang-btn::after,
+        .lang-btn *::before, .lang-btn *::after {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            outline: none !important;
+            display: inline !important;
+        }
+        html, body {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .input-panel {
+                border-right: none;
+                border-bottom: 3px solid #d4c5b9;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="panel input-panel">
+            <h1 data-i18n="title">🧭 วางแผนทริป</h1>
+
+            <form id="planForm">
+                <h2 data-i18n="visitors">👥 ประเภทผู้เข้าชม</h2>
+                <div class="form-group">
+                    <label data-i18n="thaiAdult">ผู้ใหญ่ไทย</label>
+                    <input type="number" id="thai_adult" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="thaiChild">เด็กไทย</label>
+                    <input type="number" id="thai_child" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="foreignAdult">ผู้ใหญ่ต่างชาติ</label>
+                    <input type="number" id="foreign_adult" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="foreignChild">เด็กต่างชาติ</label>
+                    <input type="number" id="foreign_child" min="0" value="0">
+                </div>
+
+                <h2 data-i18n="hotel">🏨 เลือกโรงแรม</h2>
+                <div class="form-group">
+                    <select id="hotel" required>
+                        <option value="">-- เลือกโรงแรม --</option>
+                    </select>
+                </div>
+
+                <h2 data-i18n="dates">📅 วันเดินทาง</h2>
+                <div class="form-group">
+                    <label for="startDate" data-i18n="startDate">วันเริ่ม</label>
+                    <input type="date" id="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="daysCount" data-i18n="daysCount">จำนวนวัน</label>
+                    <input type="number" id="daysCount" min="1" max="7" value="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="departTime" data-i18n="departTime">เวลาออกจากโรงแรม</label>
+                    <input type="time" id="departTime" value="09:00">
+                </div>
+                <div class="form-group">
+                    <label for="returnTime" data-i18n="returnTime">เวลากลับมาที่โรงแรม</label>
+                    <input type="time" id="returnTime" value="18:00">
+                </div>
+                <div class="form-group">
+                    <label for="placesPerDay" data-i18n="placesPerDay">จำนวนสถานที่ต่อวัน</label>
+                    <input type="number" id="placesPerDay" min="1" max="10" value="3">
+                </div>
+
+                <h2 data-i18n="budget">💰 งบประมาณรวม (บาท)</h2>
+                <div class="form-group">
+                    <input type="number" id="budget" min="0" value="1000">
+                </div>
+
+                <h2 data-i18n="categories">🛍️ ประเภทสถานที่</h2>
+                <div class="icon-box">
+                    <div class="icon-card">
+                        <input type="checkbox" id="culture" checked>
+                        <label for="culture">
+                            <span>🏯</span>
+                            <span data-i18n="culture">วัฒนธรรม</span>
+                        </label>
+                    </div>
+                    <div class="icon-card">
+                        <input type="checkbox" id="nature">
+                        <label for="nature">
+                            <span>🌲</span>
+                            <span data-i18n="nature">ธรรมชาติ</span>
+                        </label>
+                    </div>
+                    <div class="icon-card">
+                        <input type="checkbox" id="creative">
+                        <label for="creative">
+                            <span>🎨</span>
+                            <span data-i18n="creative">สร้างสรรค์</span>
+                        </label>
+                    </div>
+                </div>
+
+                <h2 data-i18n="mode">⚙️ โหมดการวางแผน</h2>
+                <div class="radio-group">
+                    <input type="radio" id="mode_rating" name="mode" value="rating" checked>
+                    <label for="mode_rating" data-i18n="rating">⭐ ความพึงพอใจสูงสุด</label>
+
+                    <input type="radio" id="mode_time" name="mode" value="time">
+                    <label for="mode_time" data-i18n="time">⏱️ เดินทางสั้นที่สุด</label>
+
+                    <input type="radio" id="mode_money" name="mode" value="money">
+                    <label for="mode_money" data-i18n="money">💰 ประหยัดงบประมาณ</label>
+                </div>
+
+                <button type="submit" data-i18n="planBtn" style="margin-top: 20px;">✨ วางแผนท่องเที่ยว</button>
+            </form>
+
+            <p class="info-text" data-i18n="formDesc">กรอกข้อมูลแล้วกดปุ่มเพื่อสร้างแผนการท่องเที่ยว</p>
+        </div>
+
+        <div class="panel output-panel">
+            <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">
+                <img id="langImg" src="{{ url_for('static', filename='TH.png') }}" alt="Language">
+            </button>
+            <h1 data-i18n="tripResult">🗺️ แผนการเดินทาง</h1>
+
+            <div class="results-container" id="resultsContainer">
+                <p class="info-text" data-i18n="resultDesc">ผลการวางแผนจะแสดงที่นี่หลังจากที่คุณสร้างแผนการท่องเที่ยว</p>
+            </div>
+
+            <div id="tripResult" class="hidden">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;">
+                    <div class="result-card"><h3>⭐ <span data-i18n="totalRating">คะแนน</span></h3><p id="totalRating">-</p></div>
+                    <div class="result-card"><h3>🛣️ <span data-i18n="totalDistance">ระยะ</span></h3><p id="totalDistance">-</p></div>
+                    <div class="result-card"><h3>💵 <span data-i18n="totalCost">ค่าใช้</span></h3><p id="totalCost">-</p></div>
+                </div>
+                <div id="dailyTrips"></div>
+                <button onclick="planAgain()" data-i18n="planAgainBtn">📄 วางแผนใหม่</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="application/json" id="hotels-data">
+        {{ hotels_data | safe }}
+    </script>
+
+    <script>
+        const hotels = JSON.parse(document.getElementById('hotels-data').textContent || '[]');
+        let currentLang = 'th';
+
+        const translations = {
+            th: {
+                title: '🧭 วางแผนทริป', visitors: '👥 ประเภทผู้เข้าชม', thaiAdult: 'ผู้ใหญ่ไทย',
+                thaiChild: 'เด็กไทย', foreignAdult: 'ผู้ใหญ่ต่างชาติ', foreignChild: 'เด็กต่างชาติ',
+                hotel: '🏨 เลือกโรงแรม', selectHotel: '-- เลือกโรงแรม --', dates: '📅 วันเดินทาง',
+                startDate: 'วันเริ่ม', daysCount: 'จำนวนวัน', departTime: 'เวลาออกจากโรงแรม',
+                returnTime: 'เวลากลับมาที่โรงแรม', placesPerDay: 'จำนวนสถานที่ต่อวัน', budget: '💰 งบประมาณรวม (บาท)',
+                categories: '🛍️ ประเภทสถานที่', culture: 'วัฒนธรรม', nature: 'ธรรมชาติ', creative: 'สร้างสรรค์',
+                mode: '⚙️ โหมดการวางแผน', rating: '⭐ ความพึงพอใจสูงสุด', time: '⏱️ เดินทางสั้นที่สุด',
+                money: '💰 ประหยัดงบประมาณ', planBtn: '✨ วางแผนท่องเที่ยว', formDesc: 'กรอกข้อมูลแล้วกดปุ่มเพื่อสร้างแผนการท่องเที่ยว',
+                tripResult: '🗺️ แผนการเดินทาง', resultDesc: 'ผลการวางแผนจะแสดงที่นี่หลังจากที่คุณสร้างแผนการท่องเที่ยว',
+                totalRating: 'คะแนน', totalDistance: 'ระยะทาง', totalCost: 'ค่าใช้จ่าย',
+                dayLabel: 'วันที่', planAgainBtn: '📄 วางแผนใหม่', errorMsg: 'เกิดข้อผิดพลาด',
+                img: '{{ url_for("static", filename="TH.png") }}'
+            },
+            en: {
+                title: '🧭 Trip Planner', visitors: '👥 Visitor Types', thaiAdult: 'Thai Adults',
+                thaiChild: 'Thai Children', foreignAdult: 'Foreign Adults', foreignChild: 'Foreign Children',
+                hotel: '🏨 Select Hotel', selectHotel: '-- Select Hotel --', dates: '📅 Travel Dates',
+                startDate: 'Start Date', daysCount: 'Number of Days', departTime: 'Departure Time',
+                returnTime: 'Return Time', placesPerDay: 'Places per Day', budget: '💰 Total Budget (Baht)',
+                categories: '🛍️ Preferred Categories', culture: 'Culture', nature: 'Nature', creative: 'Creative',
+                mode: '⚙️ Planning Mode', rating: '⭐ Highest Satisfaction', time: '⏱️ Shortest Journey',
+                money: '💰 Budget Friendly', planBtn: '✨ Plan Trip', formDesc: 'Fill in and click to create a trip plan',
+                tripResult: '🗺️ Travel Plan', resultDesc: 'Planning results will appear here after you create a trip plan',
+                totalRating: 'Score', totalDistance: 'Distance', totalCost: 'Cost',
+                dayLabel: 'Day', planAgainBtn: '📄 Plan Again', errorMsg: 'Error',
+                img: '{{ url_for("static", filename="en.jpg") }}'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.documentElement.lang = currentLang;
+            document.getElementById('langImg').src = translations[currentLang].img;
+            updatePageLanguage();
+        }
+
+        function updatePageLanguage() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+        }
+
+        const hotelSel = document.getElementById('hotel');
+        hotels.forEach(h => {
+            const o = document.createElement('option');
+            o.value = h.name;
+            o.textContent = h.name;
+            hotelSel.appendChild(o);
+        });
+
+        document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
+
+        document.getElementById('planForm').onsubmit = e => {
+            e.preventDefault();
+            const days = [];
+            let d = new Date(document.getElementById('startDate').value);
+            for (let i = 0; i < document.getElementById('daysCount').value; i++) {
+                days.push(d.toISOString().split('T')[0]);
+                d.setDate(d.getDate() + 1);
+            }
+
+            fetch('/api/plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    hotel: document.getElementById('hotel').value,
+                    days: days,
+                    departTime: document.getElementById('departTime').value,
+                    returnTime: document.getElementById('returnTime').value,
+                    placesCount: document.getElementById('placesPerDay').value,
+                    budget: document.getElementById('budget').value,
+                    mode: document.querySelector('input[name=mode]:checked').value,
+                    categories: {
+                        culture: document.getElementById('culture').checked,
+                        nature: document.getElementById('nature').checked,
+                        creative: document.getElementById('creative').checked
+                    },
+                    visitors: {
+                        thai_adult: +document.getElementById('thai_adult').value,
+                        thai_child: +document.getElementById('thai_child').value,
+                        foreign_adult: +document.getElementById('foreign_adult').value,
+                        foreign_child: +document.getElementById('foreign_child').value
+                    }
+                })
+            })
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(showResult)
+            .catch(err => {
+                console.error(err);
+                document.getElementById('resultsContainer').innerHTML = '<p style="color: #d9534f;">' + translations[currentLang].errorMsg + '</p>';
+            });
+        };
+
+        function showResult(r) {
+            document.getElementById('resultsContainer').innerHTML = '';
+                document.getElementById('tripResult').classList.remove('hidden');
+            
+                document.getElementById('totalRating').textContent = r.summary.total_rating.toFixed(1);
+                document.getElementById('totalDistance').textContent = r.summary.total_distance + ' km';
+                document.getElementById('totalCost').textContent = r.summary.total_cost + ' บาท';
+
+                let html = '<div class="daily-trips-container">';
+                r.days.forEach((day, i) => {
+                    html += `<div class="day-column">`;
+                    html += `<h3>${translations[currentLang].dayLabel} ${i+1} — ${day.date}</h3>`;
+
+                    day.route.forEach(e => {
+                        if (e.type === 'hotel_start') {
+                            html += `<div class="trip-step hotel"><div class="step-title">🏨 ${e.name}</div><div class="step-meta">เริ่ม: ${e.depart}</div></div>`;
+                        } else if (e.type === 'hotel_end') {
+                            html += `<div class="trip-step hotel"><div class="step-title">🏨 ${e.name}</div><div class="step-meta">กลับถึง: ${e.arrive}</div></div>`;
+                        } else if (e.type === 'place') {
+                            html += `<div class="trip-step"><div class="step-title">📍 ${e.name}</div><div class="step-meta">${e.arrive} - ${e.depart} &middot; ${e.stay} นาที</div><div class="step-meta">💵 ${e.cost} บาท &nbsp; ⭐ ${e.rating}</div></div>`;
+                        }
+                    });
+
+                    html += `</div>`;
+                });
+                html += '</div>';
+                document.getElementById('dailyTrips').innerHTML = html;
+        }
+
+        function planAgain() {
+            document.getElementById('tripResult').classList.add('hidden');
+            document.getElementById('resultsContainer').innerHTML = '<p class="info-text">' + translations[currentLang].resultDesc + '</p>';
+        }
+
+        updatePageLanguage();
+    </script>
+</body>
+</html>
